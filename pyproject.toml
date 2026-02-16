@@ -13,7 +13,10 @@ matplotlib = "^3.10.8"
 pandas-stubs = "^2.2.0"  # Changed to match pandas version
 scikit-learn = "^1.8.0"
 ipykernel = "^7.2.0"
-tensorflow-macos = "^2.16.2"
+smogn = "^0.1.2"
+xgboost = "^3.2.0"
+tensorflow = "2.19.0"
+tensorflow-decision-forests = "1.12.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
