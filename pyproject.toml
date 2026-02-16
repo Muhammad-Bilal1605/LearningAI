@@ -1,19 +1,19 @@
-[project]
+[tool.poetry]
 name = "learningai"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Muhammad-Bilal1605",email = "zaheermbilal1605@gmail.com"}
-]
-requires-python = ">=3.14"
-dependencies = [
-    "jupyterlab (>=4.5.3,<5.0.0)",
-    "pandas (>=3.0.0,<4.0.0)",
-    "matplotlib (>=3.10.8,<4.0.0)",
-    "pandas-stubs (>=3.0.0,<3.1.0)",
-    "scikit-learn (>=1.8.0,<2.0.0)"
-]
+authors = ["Muhammad-Bilal1605 <zaheermbilal1605@gmail.com>"]
+package-mode = false
 
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"  # Changed: TensorFlow doesn't support 3.13+ yet
+jupyterlab = "^4.5.4"
+pandas = "^2.2.0"  # Changed from ^3.0.0
+matplotlib = "^3.10.8"
+pandas-stubs = "^2.2.0"  # Changed to match pandas version
+scikit-learn = "^1.8.0"
+ipykernel = "^7.2.0"
+tensorflow-macos = "^2.16.2"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
