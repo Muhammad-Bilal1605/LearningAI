@@ -2427,6 +2427,26 @@ qa = ["flake8 (==5.0.4)", "types-setuptools (==67.2.0.1)", "zuban (==0.5.1)"]
 testing = ["docopt", "pytest"]
 
 [[package]]
+name = "path"
+version = "17.1.1"
+description = "A module wrapper for os.path"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "path-17.1.1-py3-none-any.whl", hash = "sha256:ec7e136df29172e5030dd07e037d55f676bdb29d15bfa09b80da29d07d3b9303"},
+    {file = "path-17.1.1.tar.gz", hash = "sha256:2dfcbfec8b4d960f3469c52acf133113c2a8bf12ac7b98d629fa91af87248d42"},
+]
+
+[package.extras]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\""]
+cover = ["pytest-cov"]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
+enabler = ["pytest-enabler (>=2.2)"]
+test = ["appdirs", "more_itertools", "packaging", "pygments", "pytest (>=6,!=8.1.*)", "pywin32 ; platform_system == \"Windows\" and python_version < \"3.12\"", "types-pywin32"]
+type = ["pytest-mypy"]
+
+[[package]]
 name = "pexpect"
 version = "4.9.0"
 description = "Pexpect allows easy control of interactive console applications."
@@ -4058,4 +4078,4 @@ tensorflow = ["ydf-tf"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "a8d580752f7ac536dab248df643feb61a2713cef414ea42ca7eccc04f97968fe"
+content-hash = "920d1f7224ce57823b2a1389f12601eb8a974c09ae967303cd54f50b116b1707"
