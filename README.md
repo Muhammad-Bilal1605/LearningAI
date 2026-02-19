@@ -245,6 +245,46 @@ python -c "import numpy as np; print(np.__version__)"
 
 ---
 
+# ModuleNotFoundError: No module named `pkg_resources`
+
+## Description
+
+While attempting to use TensorFlow Hub (`tensorflow_hub`), the following error occurred:
+
+```
+ModuleNotFoundError: No module named 'pkg_resources'
+```
+
+This happened during the import step:
+
+```python
+import tensorflow_hub as hub
+```
+
+> The issue is caused by newer versions of `setuptools` (>=81) where `pkg_resources` is no longer bundled by default. Since `tensorflow_hub` internally depends on `pkg_resources`, the import fails in environments using newer setuptools versions (especially with Python 3.12).
+
+---
+
+## Fix
+
+Two possible solutions:
+
+### ✅ Option 1: Install setuptools (if missing)
+
+```bash
+poetry add setuptools
+```
+
+### ✅ Option 2: Downgrade setuptools *(recommended — what worked in this case)*
+
+Downgrading to a version that still includes `pkg_resources` resolved the issue:
+
+```bash
+poetry add setuptools@80.0.0
+```
+
+---
+
 ## ⚙️ IDE Configurations
 
 ### 1. PyCharm
