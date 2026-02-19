@@ -4157,4 +4157,4 @@ tensorflow = ["ydf-tf"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "d8c3ddd299d3960a552c757dac8b7d1f5e1e3e39719a102ab5cb4d38f20caec6"
+content-hash = "55319aa70875f3e66245a1582d83e3fcf8f88c82f5dfc0c605eedb68e433c86e"
