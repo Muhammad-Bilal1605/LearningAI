@@ -17,8 +17,8 @@
             --bg: #0a0e1a;
             --surface: #111827;
             --surface2: #1a2235;
-            --accent: #8b5cf6;
-            --accent-dark: #7c3aed;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
             --text: #f1f5f9;
             --muted: #64748b;
             --border: rgba(255, 255, 255, 0.07);
@@ -40,7 +40,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: radial-gradient(ellipse 60% 50% at 50% 80%, rgba(139, 92, 246, 0.09) 0%, transparent 60%);
+            background: radial-gradient(ellipse 60% 50% at 50% 80%, rgba(59, 130, 246, 0.09) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -126,7 +126,7 @@
 
         /* File upload drop zone */
         .upload-zone {
-            border: 2px dashed rgba(139, 92, 246, 0.3);
+            border: 2px dashed rgba(59, 130, 246, 0.3);
             border-radius: var(--radius-sm);
             padding: 40px 24px;
             text-align: center;
@@ -138,7 +138,7 @@
 
         .upload-zone:hover, .upload-zone.drag-over {
             border-color: var(--accent);
-            background: rgba(139, 92, 246, 0.05);
+            background: rgba(59, 130, 246, 0.05);
         }
 
         .upload-zone input[type="file"] {
