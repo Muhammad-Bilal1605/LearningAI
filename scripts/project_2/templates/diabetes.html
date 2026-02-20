@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .positive {
+            color: red;
+        }
+
+        .negative {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Diabetes Risk Predictor</h2>
+
+    <form method="POST" action="/diabetes">
+        <input type="number" name="Pregnancies" placeholder="Pregnancies" required>
+        <input type="number" name="Glucose" placeholder="Glucose" required>
+        <input type="number" name="BloodPressure" placeholder="Blood Pressure" required>
+        <input type="number" name="SkinThickness" placeholder="Skin Thickness" required>
+        <input type="number" name="Insulin" placeholder="Insulin" required>
+        <input type="number" step="any" name="BMI" placeholder="BMI" required>
+        <input type="number" step="any" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function"
+               required>
+        <input type="number" name="Age" placeholder="Age" required>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <p>Probability: {{ prediction.probability }}</p>
+
+        {% if prediction.class == "Diabetes" %}
+        <p class="positive">Result: Diabetes</p>
+        {% else %}
+        <p class="negative">Result: Not Diabetes</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

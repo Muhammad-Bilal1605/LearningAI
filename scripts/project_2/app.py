@@ -38,7 +38,7 @@ def index():
             processed_image = preprocess_image(image)
 
             pred = pneumonia_model.predict(processed_image)
-            prob = float(pred[0][0])
+            prob = float(pred)
             print(pred)
             label = "Pneumonia" if prob >= 0.5 else "Normal"
 
@@ -52,20 +52,34 @@ def index():
     return render_template("pneumonia.html", prediction=prediction)
 
 
-@app.route("/diabetes")
+@app.route("/diabetes", methods=["GET", "POST"])
 def predict():
-    input_data = np.array([[6, 148, 72, 35, 0, 33.6, 0.625, 50]])
+    prediction = None
 
-    scaled_input = scaler.transform(input_data)
+    if request.method == "POST":
+        input_data = np.array([[
+            float(request.form["Pregnancies"]),
+            float(request.form["Glucose"]),
+            float(request.form["BloodPressure"]),
+            float(request.form["SkinThickness"]),
+            float(request.form["Insulin"]),
+            float(request.form["BMI"]),
+            float(request.form["DiabetesPedigreeFunction"]),
+            float(request.form["Age"])
+        ]])
 
-    prediction = model.predict(scaled_input)
+        scaled_input = scaler.transform(input_data)
+        pred = model.predict(scaled_input)
+        prob = float(pred)
 
-    print("Scaled Input:", scaled_input)
-    print("Prediction:", prediction)
-    if prediction > 0.6:
-        return "Outcome= Diabetes"
-    else:
-        return "Outcome= Not Diabetes"
+        label = "Diabetes" if prob >= 0.6 else "Not Diabetes"
+
+        prediction = {
+            "probability of being pneumonia": round(prob, 4),
+            "class": label
+        }
+
+    return render_template("diabetes.html", prediction=prediction)
 
 
 if __name__ == "__main__":
