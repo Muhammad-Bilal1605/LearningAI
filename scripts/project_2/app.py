@@ -83,7 +83,7 @@ def predict():
         label = "Diabetes" if prob >= 0.6 else "Not Diabetes"
         prob = 1 - prob if label == "Not Diabetes" else prob
         prediction = {
-            "probability": (round((prob * 100), 4) * 100),
+            "probability": (round((prob * 100), 4)),
             "class": label
         }
 
