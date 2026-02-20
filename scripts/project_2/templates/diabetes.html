@@ -309,11 +309,11 @@
                 <div class="result-label">// prediction result</div>
                 <div class="result-row">
                     {% if prediction.class == "Diabetes" %}
-                    <span class="result-class positive">Diabetes Detected</span>
+                    <span class="result-class positive">Risk For Diabetes Detected</span>
                     {% else %}
-                    <span class="result-class negative">No Diabetes</span>
+                    <span class="result-class negative">No Risk For Diabetes</span>
                     {% endif %}
-                    <span class="result-prob">prob: {{ prediction.probability }}</span>
+                    <span class="result-prob">Confidence: {{ prediction.probability }}</span>
                 </div>
             </div>
             {% endif %}

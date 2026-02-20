@@ -49,9 +49,10 @@ def predictPneumonia():
             prob = float(pred)
             print(pred)
             label = "Pneumonia" if prob >= 0.5 else "Normal"
+            prob = 1 - prob if label == "Normal" else prob
 
             prediction = {
-                "probability": round(prob, 4),
+                "probability": round((prob * 100), 4),
                 "class": label,
 
             }
@@ -80,9 +81,9 @@ def predict():
         prob = float(pred)
 
         label = "Diabetes" if prob >= 0.6 else "Not Diabetes"
-
+        prob = 1 - prob if label == "Not Diabetes" else prob
         prediction = {
-            "probability": round(prob, 4),
+            "probability": (round((prob * 100), 4) * 100),
             "class": label
         }
 
