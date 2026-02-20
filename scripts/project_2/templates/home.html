@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ML Health Suite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --accent: #3b82f6;
+            --accent2: #06b6d4;
+            --accent3: #8b5cf6;
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --border: rgba(255, 255, 255, 0.07);
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Subtle background mesh */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 20% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 60% at 80% 80%, rgba(139, 92, 246, 0.10) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 40% at 60% 10%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* NAV */
+        nav {
+            padding: 20px 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            color: var(--muted);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 100px 48px 80px;
+            max-width: 860px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent2);
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            border-radius: 100px;
+            padding: 5px 14px;
+            margin-bottom: 28px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent2);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        h1 {
+            font-size: clamp(36px, 5vw, 58px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 22px;
+            letter-spacing: -0.02em;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 560px;
+            font-weight: 300;
+        }
+
+        /* CARDS */
+        .section {
+            padding: 20px 48px 80px;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 28px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:nth-child(1)::before {
+            background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08), transparent 70%);
+        }
+
+        .card:nth-child(2)::before {
+            background: radial-gradient(circle at 0% 0%, rgba(6, 182, 212, 0.08), transparent 70%);
+        }
+
+        .card:nth-child(3)::before {
+            background: radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.08), transparent 70%);
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .card:nth-child(1) .card-icon {
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .card:nth-child(2) .card-icon {
+            background: rgba(6, 182, 212, 0.15);
+        }
+
+        .card:nth-child(3) .card-icon {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .card-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 4px;
+            transition: gap 0.2s;
+        }
+
+        .card:nth-child(1) .card-link {
+            color: var(--accent);
+        }
+
+        .card:nth-child(2) .card-link {
+            color: var(--accent2);
+        }
+
+        .card:nth-child(3) .card-link {
+            color: var(--accent3);
+        }
+
+        .card:hover .card-link {
+            gap: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 32px 48px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 640px) {
+            nav, .hero, .section, footer {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .hero {
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <nav>
+        <div class="logo">ml<span>.</span>health</div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-tag">Machine Learning · Healthcare</div>
+        <h1>Predictive Health<br><span class="highlight">Intelligence Suite</span></h1>
+        <p class="hero-desc">Three ML-powered tools designed to assist clinicians and researchers with fast, data-driven
+            health assessments — from disease risk to insurance cost estimation.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-label">// available models</div>
+        <div class="cards">
+
+            <a class="card" href="/diabetes">
+                <div class="card-icon">🩸</div>
+                <div class="card-title">Diabetes Risk Predictor</div>
+                <div class="card-desc">Input patient vitals — glucose levels, BMI, age, blood pressure and more — to
+                    receive an instant probability score for diabetes onset based on the Pima Indians dataset.
+                </div>
+                <div class="card-meta">
+                    <span class="tag">Classification</span>
+                    <span class="tag">8 features</span>
+                    <span class="tag">Binary output</span>
+                </div>
+                <div class="card-link">Open predictor →</div>
+            </a>
+
+            <a class="card" href="/MedicalCost">
+                <div class="card-icon">💊</div>
+                <div class="card-title">Medical Cost Estimator</div>
+                <div class="card-desc">Estimate annual insurance charges based on demographic and lifestyle factors
+                    including age, BMI, smoking status, and region. Powered by a regression model trained on real
+                    insurance data.
+                </div>
+                <div class="card-meta">
+                    <span class="tag">Regression</span>
+                    <span class="tag">6 features</span>
+                    <span class="tag">USD output</span>
+                </div>
+                <div class="card-link">Open estimator →</div>
+            </a>
+
+            <a class="card" href="/Pnemonia">
+                <div class="card-icon">🫁</div>
+                <div class="card-title">Pneumonia Classifier</div>
+                <div class="card-desc">Upload a chest X-ray image and receive an instant AI-powered classification —
+                    detecting pneumonia vs. normal lung findings using a convolutional neural network trained on labeled
+                    radiographs.
+                </div>
+                <div class="card-meta">
+                    <span class="tag">CNN</span>
+                    <span class="tag">Image input</span>
+                    <span class="tag">Binary output</span>
+                </div>
+                <div class="card-link">Open classifier →</div>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>ML Health Suite — for research and informational use only.</p>
+        <p>Not a substitute for professional medical advice.</p>
+    </footer>
+</div>
+</body>
+</html>

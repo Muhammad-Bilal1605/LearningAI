@@ -1,21 +1,325 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Image Classifier</title>
+    <meta charset="UTF-8">
+    <title>Pneumonia Classifier — ML Health Suite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --accent: #8b5cf6;
+            --accent-dark: #7c3aed;
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --border: rgba(255, 255, 255, 0.07);
+            --input-bg: #0f1623;
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 50% at 50% 80%, rgba(139, 92, 246, 0.09) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            padding: 20px 48px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back {
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            transition: color 0.2s;
+        }
+
+        .back:hover {
+            color: var(--text);
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            color: var(--muted);
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 24px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+        }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* File upload drop zone */
+        .upload-zone {
+            border: 2px dashed rgba(139, 92, 246, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .upload-sub {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .file-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 10px;
+            display: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 13px;
+            background: var(--accent);
+            color: white;
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 0.01em;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+
+        .result-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-class {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .pneumonia {
+            color: #f87171;
+        }
+
+        .normal {
+            color: #4ade80;
+        }
+
+        .result-prob {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--muted);
+        }
+    </style>
 </head>
 <body>
-<h2>Upload Image</h2>
+<div class="page">
+    <nav>
+        <a class="back" href="/">← back</a>
+        <div style="color:var(--border)">|</div>
+        <div class="logo">ml<span>.</span>health</div>
+    </nav>
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="image" required>
-    <button type="submit">Predict</button>
-</form>
+    <div class="main">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">🫁</div>
+                <h1>Pneumonia Classifier</h1>
+                <p class="subtitle">Upload a chest X-ray image to detect pneumonia using a CNN model trained on labeled
+                    radiographs.</p>
+            </div>
 
-{% if prediction %}
-<h3>Result:</h3>
-<p>Probability: {{ prediction.probability }}</p>
-<p>Predicted Class: {{ prediction.class }}</p>
-{% endif %}
+            <form method="POST" enctype="multipart/form-data">
+                <div class="upload-zone" id="dropZone">
+                    <input type="file" name="image" accept="image/*" required id="fileInput">
+                    <span class="upload-icon">🔬</span>
+                    <div class="upload-text">Drop X-ray image here</div>
+                    <div class="upload-sub">or click to browse · PNG, JPG, JPEG</div>
+                    <div class="file-name" id="fileName"></div>
+                </div>
 
+                <button type="submit">Classify Image</button>
+            </form>
+
+            {% if prediction %}
+            <div class="result">
+                <div class="result-label">// classification result</div>
+                <div class="result-row">
+                    {% if prediction.class == "Pneumonia" %}
+                    <span class="result-class pneumonia">Pneumonia Detected</span>
+                    {% else %}
+                    <span class="result-class normal">Normal</span>
+                    {% endif %}
+                    <span class="result-prob">prob: {{ prediction.probability }}</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const dropZone = document.getElementById('dropZone');
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileName.textContent = fileInput.files[0].name;
+            fileName.style.display = 'block';
+        }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        if (e.dataTransfer.files.length) {
+            fileInput.files = e.dataTransfer.files;
+            fileName.textContent = e.dataTransfer.files[0].name;
+            fileName.style.display = 'block';
+        }
+    });
+</script>
 </body>
 </html>

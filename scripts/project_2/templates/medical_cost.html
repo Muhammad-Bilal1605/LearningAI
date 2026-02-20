@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Diabetes Risk Predictor — ML Health Suite</title>
+    <title>Medical Cost Estimator — ML Health Suite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet">
@@ -17,8 +17,8 @@
             --bg: #0a0e1a;
             --surface: #111827;
             --surface2: #1a2235;
-            --accent: #3b82f6;
-            --accent2: #06b6d4;
+            --accent: #06b6d4;
+            --accent-dark: #0891b2;
             --text: #f1f5f9;
             --muted: #64748b;
             --border: rgba(255, 255, 255, 0.07);
@@ -40,7 +40,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: radial-gradient(ellipse 60% 50% at 15% 30%, rgba(59, 130, 246, 0.10) 0%, transparent 60%);
+            background: radial-gradient(ellipse 60% 50% at 85% 30%, rgba(6, 182, 212, 0.09) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -161,6 +161,7 @@
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
             -moz-appearance: textfield;
+            appearance: none;
         }
 
         input::-webkit-outer-spin-button,
@@ -170,7 +171,7 @@
 
         input:focus, select:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
         }
 
         input::placeholder {
@@ -179,16 +180,33 @@
 
         select option {
             background: var(--surface);
+            color: var(--text);
+        }
+
+        /* Custom select arrow */
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: '▾';
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+            font-size: 12px;
         }
 
         button[type="submit"] {
             width: 100%;
             padding: 13px;
             background: var(--accent);
-            color: white;
+            color: #0a0e1a;
             font-family: 'Sora', sans-serif;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
             border-radius: var(--radius-sm);
             cursor: pointer;
@@ -197,7 +215,8 @@
         }
 
         button[type="submit"]:hover {
-            background: #2563eb;
+            background: var(--accent-dark);
+            color: white;
             transform: translateY(-1px);
         }
 
@@ -219,33 +238,20 @@
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .result-class {
-            font-size: 20px;
+        .result-value {
+            font-size: 32px;
             font-weight: 700;
-            letter-spacing: -0.01em;
+            color: var(--accent);
+            letter-spacing: -0.02em;
         }
 
-        .positive {
-            color: #f87171;
-        }
-
-        .negative {
-            color: #4ade80;
-        }
-
-        .result-prob {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+        .result-note {
+            font-size: 12px;
             color: var(--muted);
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -260,61 +266,64 @@
     <div class="main">
         <div class="card">
             <div class="card-header">
-                <div class="card-icon">🩸</div>
-                <h1>Diabetes Risk Predictor</h1>
-                <p class="subtitle">Enter patient vitals to receive a probability score for diabetes onset.</p>
+                <div class="card-icon">💊</div>
+                <h1>Medical Cost Estimator</h1>
+                <p class="subtitle">Estimate annual insurance charges based on demographic and lifestyle factors.</p>
             </div>
 
-            <form method="POST" action="/diabetes">
+            <form method="POST">
                 <div class="form-grid">
                     <div class="field">
-                        <label>Pregnancies</label>
-                        <input type="number" name="Pregnancies" placeholder="0" required>
-                    </div>
-                    <div class="field">
                         <label>Age</label>
-                        <input type="number" name="Age" placeholder="e.g. 35" required>
-                    </div>
-                    <div class="field">
-                        <label>Glucose</label>
-                        <input type="number" name="Glucose" placeholder="mg/dL" required>
-                    </div>
-                    <div class="field">
-                        <label>Blood Pressure</label>
-                        <input type="number" name="BloodPressure" placeholder="mmHg" required>
-                    </div>
-                    <div class="field">
-                        <label>Skin Thickness</label>
-                        <input type="number" name="SkinThickness" placeholder="mm" required>
-                    </div>
-                    <div class="field">
-                        <label>Insulin</label>
-                        <input type="number" name="Insulin" placeholder="μU/mL" required>
+                        <input type="number" name="age" placeholder="e.g. 42" required>
                     </div>
                     <div class="field">
                         <label>BMI</label>
-                        <input type="number" step="any" name="BMI" placeholder="kg/m²" required>
+                        <input type="number" step="0.01" name="bmi" placeholder="kg/m²" required>
                     </div>
                     <div class="field">
-                        <label>Pedigree Function</label>
-                        <input type="number" step="any" name="DiabetesPedigreeFunction" placeholder="0.0–2.5" required>
+                        <label>Sex</label>
+                        <div class="select-wrap">
+                            <select name="sex">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Children</label>
+                        <input type="number" name="children" placeholder="0" required>
+                    </div>
+                    <div class="field">
+                        <label>Smoker</label>
+                        <div class="select-wrap">
+                            <select name="smoker">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>Region</label>
+                        <div class="select-wrap">
+                            <select name="region">
+                                <option value="southwest">Southwest</option>
+                                <option value="southeast">Southeast</option>
+                                <option value="northwest">Northwest</option>
+                                <option value="northeast">Northeast</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit">Run Prediction</button>
+                <button type="submit">Estimate Cost</button>
             </form>
 
             {% if prediction %}
             <div class="result">
-                <div class="result-label">// prediction result</div>
-                <div class="result-row">
-                    {% if prediction.class == "Diabetes" %}
-                    <span class="result-class positive">Diabetes Detected</span>
-                    {% else %}
-                    <span class="result-class negative">No Diabetes</span>
-                    {% endif %}
-                    <span class="result-prob">prob: {{ prediction.probability }}</span>
-                </div>
+                <div class="result-label">// estimated annual cost</div>
+                <div class="result-value">${{ prediction }}</div>
+                <div class="result-note">Model estimate — actual costs may vary.</div>
             </div>
             {% endif %}
         </div>
